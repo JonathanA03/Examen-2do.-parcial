@@ -1,0 +1,47 @@
+﻿create database Tienda
+go
+
+create schema factura
+go
+
+create table factura.cliente (
+	idCliente int primary key not null,
+	nombre varchar(25),
+	apellido varchar(25),
+	direccion varchar(50),
+)
+select * from factura.cliente;
+insert into factura.cliente(idCliente, nombre, apellido, direccion)
+values(0101, 'Jorge Rigoberto','Paz Gutierrez','Colonia Buenos Aires por taller Castro');
+
+
+create table factura.producto(
+	idProducto int primary key not null,
+	nombreProducto varchar(40),
+	descripcion varchar(50)
+);
+select * from factura.producto;
+insert into factura.producto(idProducto, nombreProducto, descripcion)
+values(55, 'Camiseta deportiva', 'Diseño del equipo Real Madrid con nombre Jorge'),
+	(50, 'Tacos de futbol', 'Marca Adidas total 90 con pullas de tornillo');
+	
+
+create table factura.Venta(
+	idVenta int primary key not null,
+	fechaVenta date,
+	precio int,
+	cantidad int,
+	idCliente int foreign key references factura.cliente(idCliente),
+	idProducto int foreign key references factura.producto(idProducto)
+);
+drop table factura.Venta;
+insert into factura.Venta(idVenta, fechaVenta, precio, cantidad, idCliente, idProducto)
+values(02, '2020-05-01', 100, 5, 0101, 55);
+
+
+select Venta.idCliente as 'ID Cliente', Cliente.nombre as 'Nombre', Cliente.apellido as 'Apellido', Producto.nombreProducto as 'Producto', precio as 'Precio', cantidad as 'Cantidad',fechaVenta as 'Fecha de Venta' 
+from factura.cliente as Cliente
+inner join factura.Venta as Venta 
+on Cliente.idCliente = Venta.idCliente
+inner join factura.producto as Producto
+on Venta.idProducto = Producto.idProducto
